@@ -1,8 +1,2 @@
 # mika_desu
-你好desu
-你好desuwa
-
-笨蛋
-能改了吗desu
-
-草台班子
+你要相信，有时候，草台班子也能创造奇迹desu
