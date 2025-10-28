@@ -1,0 +1,13 @@
+package com.animecommunity.animeauth;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class AnimeAuthApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(AnimeAuthApplication.class, args);
+    }
+
+}
