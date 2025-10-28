@@ -1,0 +1,50 @@
+version: '3'
+services:
+  nacos-mysql:
+    container_name: nacos-mysql
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nacos_config
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d:ro
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    user:
+      "mysql:mysql"
+    networks:
+      - anime-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  nacos:
+    container_name: nacos
+    image: nacos/nacos-server:v2.2.3
+    depends_on:
+      nacos-mysql:
+        condition: service_healthy    # 等待 MySQL 完全就绪
+    restart: always
+    environment:
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./nacos/conf:/home/nacos/conf
+      - ./nacos/data:/home/nacos/data
+      - ./nacos/logs:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    networks:
+      - anime-network
+
+networks:
+  anime-network:
+    driver: bridge
